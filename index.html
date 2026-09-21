@@ -1,4 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- Sem esta linha o celular desenha a página como se fosse um monitor de
+     980px e depois encolhe tudo: o texto fica minúsculo e a folha boiando no
+     meio da tela. O viewport-fit=cover é para o app instalado ocupar a tela
+     inteira, inclusive atrás do entalhe. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Estudo Dirigido DETRAN-SP</title>
+<meta name="description" content="Um cartão por dia até a prova do DETRAN-SP: a hora dividida, o texto da lei e questões no estilo da banca.">
+
+<!-- A barra de status acompanha a folha, clara de dia e escura de noite. -->
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14140f" media="(prefers-color-scheme: dark)">
+
+<!-- Abrir como app quando estiver na tela de início. O nome curto é o que
+     cabe embaixo do ícone; o título inteiro não caberia. -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DETRAN-SP">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icone-192.png">
+<link rel="apple-touch-icon" href="icone-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
@@ -15,7 +39,11 @@
 --regul:#7ba7e8;--regul-bg:#14213a;--proib:#e8767a;--proib-bg:#331617;--verde:#7cc296;--verde-bg:#15291e;}
 *{box-sizing:border-box}
 body{background:var(--ground);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;
-font-size:16px;line-height:1.55;padding-inline:16px;padding-block:28px 60px}
+font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%;
+/* O env() vale zero no navegador comum; só cresce no app instalado, para o
+   texto não passar por baixo do relógio nem da barra de gestos. */
+padding-inline:calc(16px + env(safe-area-inset-left)) calc(16px + env(safe-area-inset-right));
+padding-block:calc(28px + env(safe-area-inset-top)) calc(60px + env(safe-area-inset-bottom))}
 .folha{max-width:680px;margin-inline:auto;display:flex;flex-direction:column;gap:24px}
 .rotulo{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:13px;
 letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:0}
@@ -85,8 +113,12 @@ padding:4px 12px;border-radius:999px;cursor:pointer;margin-left:8px;vertical-ali
 font-size:10px;line-height:22px;text-align:center;float:left;letter-spacing:0}
 .art .t{display:block;overflow:hidden}
 .ouvir:focus-visible{outline:2px solid var(--regul);outline-offset:2px}
-.barravoz{display:none;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--rule);
-border-radius:8px;padding:11px 14px;font-size:14.5px}
+/* Com wrap, quando o texto e o seletor não cabem lado a lado o seletor desce
+   inteiro para a linha de baixo, encostado à direita. Sem isso o texto se
+   espremia em três linhas no celular e a barra ficava torta. */
+.barravoz{display:none;align-items:center;flex-wrap:wrap;gap:10px;background:var(--panel);
+border:1px solid var(--rule);border-radius:8px;padding:11px 14px;font-size:14.5px}
+.barravoz>span{flex:1 1 220px}
 .tem-voz .barravoz{display:flex}
 .barravoz select{font-family:inherit;font-size:14px;padding:4px 8px;border-radius:6px;
 border:1px solid var(--rule);background:var(--panel-2);color:var(--ink)}
@@ -108,6 +140,9 @@ details.resp>summary::-webkit-details-marker{display:none}
 .respbox b{color:var(--verde);font-family:"Barlow Condensed",sans-serif;font-size:16px}
 .prova{font-family:"Barlow Condensed",sans-serif;font-size:13px;letter-spacing:.05em;color:var(--regul)}
 </style>
+</head>
+<body>
+
 <div class="folha">
 <header><p class="rotulo">Agente Estadual de Trânsito · Instituto Avalia · prova em 1º/11/2026</p><h1>Estudo<br>dirigido</h1><p>Um cartão por dia, até a prova. Abra o de hoje: a hora já vem dividida e <b>o texto da lei está dentro do próprio dia</b> — não é preciso procurar nada fora.</p></header>
 <div class="faixa"><div><span class="n">45</span><span class="t">dias até a prova</span></div><div><span class="n">53 h</span><span class="t">1h de seg a sex<br>3h no sábado</span></div><div><span class="n">2</span><span class="t">simulados<br>cronometrados</span></div></div>
@@ -325,3 +360,18 @@ details.resp>summary::-webkit-details-marker{display:none}
   if (alvo) { alvo.open = true; }
 })();
 </script>
+
+<script>
+  /* Registra o service worker, que é o que faz o Chrome instalar de verdade
+     em vez de criar um atalho que reabre o navegador. Só funciona por https
+     (o GitHub Pages serve assim) ou em localhost; abrindo o arquivo direto
+     do disco ele simplesmente não entra, e a página continua funcionando. */
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+</script>
+
+</body>
+</html>

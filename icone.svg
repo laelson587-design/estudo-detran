@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <!-- O ícone do estudo dirigido: o semáforo.
+
+       Três luzes na ordem de cima para baixo, que é a única ordem que o olho
+       reconhece sem ler nada — e trânsito é 60% da prova.
+
+       As cores são as do plano (--proib, --placa, --verde), clareadas um
+       pouco: as originais foram escolhidas para texto sobre papel claro e
+       somem contra o corpo escuro do semáforo.
+
+       O desenho cabe dentro de 73% do quadrado, que é o que sobra depois do
+       corte redondo que o Android faz em ícone "maskable". -->
+
+  <rect width="100" height="100" fill="#f7f5f0"/>
+
+  <rect x="33" y="19" width="34" height="62" rx="12" fill="#1b1a17"/>
+
+  <circle cx="50" cy="33" r="9" fill="#cc3b40"/>
+  <circle cx="50" cy="50" r="9" fill="#e3a41f"/>
+  <circle cx="50" cy="67" r="9" fill="#3f9d62"/>
+</svg>
